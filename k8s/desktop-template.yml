@@ -23,9 +23,13 @@ metadata:
     app.kubernetes.io/version: 2.3.1
     chaimeleon.eu/kubebench: 'true'
   annotations:
+    chaimeleon.eu/persistentHomeMountPoint: /home/chaimeleon/persistent-home
+    chaimeleon.eu/persistentSharedFolderMountPoint: /home/chaimeleon/persistent-shared-folder
+    chaimeleon.eu/datasetsMountPoint: /home/chaimeleon/datasets
+    chaimeleon.eu/datasetsIDs: a092a929-ef5b-41f2-93ee-9231c56beeb6
     chaimeleon.eu/kubebench: 'true'
     chaimeleon.eu/createGuacamoleConnection: 'true'
-    chaimeleon.eu/datasetsIDs: 698e9757-1b77-4ff1-92f5-0cb5641fed3f
+    chaimeleon.eu/datasetsIDs: a092a929-ef5b-41f2-93ee-9231c56beeb6
     chaimeleon.eu/guacamoleConnectionName: 2023-08-25-10-15-13---#kubebench-name#
     chaimeleon.eu/testingEnvironment: 'False'
     chaimeleon.eu/toolName: desktop-pytorch
@@ -63,7 +67,7 @@ spec:
                   name: #kubebench-name#
                   key: container-password
             - name: DATASETS_LIST
-              value: 698e9757-1b77-4ff1-92f5-0cb5641fed3f
+              value: a092a929-ef5b-41f2-93ee-9231c56beeb6
             - name: SSH_ENABLE_PASSWORD_AUTH
               value: 'true'
             - name: GATEWAY_PORTS
@@ -85,12 +89,6 @@ spec:
       dnsPolicy: ClusterFirst
       nodeSelector:
         chaimeleon.eu/target: desktops
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        supplementalGroups:
-          - 2116
-        fsGroup: 1000
       schedulerName: default-scheduler
       priorityClassName: processing-applications
 

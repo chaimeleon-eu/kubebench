@@ -1,0 +1,57 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: kubebench-main-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: cephfs
+  volumeMode: Filesystem
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kubebench-main
+  labels:
+    app.kubernetes.io/name: kubebench-main
+  annotations:
+    chaimeleon.eu/testingEnvironment: 'True'
+    chaimeleon.eu/toolName: kubebench
+    chaimeleon.eu/toolVersion: 1.0.0
+spec:
+  selector:
+    matchLabels:
+      app: kubebench-main
+  template:
+    metadata:
+      labels:
+        app: kubebench-main
+    spec:
+      replicas: 1
+      priorityClassName: core-services
+      nodeSelector:
+        chaimeleon.eu/target: core-services
+      containers:
+        - name: kubebench-main
+          volumeMounts:
+          - name: kubebench-main-vol
+            mountPath: /data
+          image: >-
+            harbor.chaimeleon-eu.i3m.upv.es/chaimeleon-services/kubebench:1.0.7
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          imagePullPolicy: Always
+      volumes:
+      - name: kubebench-main-vol
+        persistentVolumeClaim:
+          claimName: kubebench-main-pvc
